@@ -1,0 +1,333 @@
+
+  --
+  -- Table structure for table `victro_addon`
+  --
+
+  CREATE TABLE `victro_addon` (
+    `ID` int(11) NOT NULL,
+    `ID_CHIP` int(11) NOT NULL,
+    `MODEL` varchar(80) NOT NULL,
+    `VERSION` float NOT NULL,
+    `TOKEN` varchar(200) NOT NULL,
+    `TOKEN_OFFLINE` varchar(200) NOT NULL,
+    `TIME_OFFLINE` int(11) NOT NULL,
+    `LOCAL` varchar(150) NOT NULL,
+    `CHIP_TYPE` varchar(150) NOT NULL,
+    `DELETED` int(11) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_file`
+  --
+
+  CREATE TABLE `victro_file` (
+    `id` int(11) NOT NULL,
+    `name` varchar(200) NOT NULL,
+    `type` varchar(30) NOT NULL,
+    `f_accessible` int(1) NOT NULL,
+    `f_data` varchar(20) NOT NULL,
+    `user` int(11) NOT NULL,
+    `f_password` varchar(200) NOT NULL,
+    `folder` varchar(200) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_log`
+  --
+
+  CREATE TABLE `victro_log` (
+    `id` int(11) NOT NULL,
+    `log` text NOT NULL,
+    `date` datetime NOT NULL,
+    `user` int(11) NOT NULL,
+    `local` varchar(120) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_menu`
+  --
+
+  CREATE TABLE `victro_menu` (
+    `id` int(11) NOT NULL,
+    `name` varchar(150) CHARACTER SET utf8 NOT NULL,
+    `submenu` int(11) NOT NULL,
+    `id_robot` int(11) NOT NULL,
+    `active` int(11) NOT NULL,
+    `who_see` varchar(5) NOT NULL,
+    `icon` varchar(50) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_notification`
+  --
+
+  CREATE TABLE `victro_notification` (
+    `id` int(11) NOT NULL,
+    `subject` varchar(150) NOT NULL,
+    `text_not` text NOT NULL,
+    `icon` varchar(60) NOT NULL,
+    `link` varchar(255) NOT NULL,
+    `seen_by_user` text NOT NULL,
+    `ntype` varchar(11) NOT NULL,
+    `who_send` varchar(200) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=REDUNDANT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_power`
+  --
+
+  CREATE TABLE `victro_power` (
+    `id` int(11) NOT NULL,
+    `name` varchar(150) NOT NULL,
+    `local_url` varchar(255) NOT NULL,
+    `robot` text NOT NULL,
+    `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `author` varchar(100) NOT NULL,
+    `description` text NOT NULL,
+    `version` float NOT NULL,
+    `install_db` int(11) NOT NULL DEFAULT '0'
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_power_robot`
+  --
+
+  CREATE TABLE `victro_power_robot` (
+    `id` int(11) NOT NULL,
+    `id_robot` int(11) NOT NULL,
+    `id_power` int(11) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_robot`
+  --
+
+  CREATE TABLE `victro_robot` (
+    `id` int(11) NOT NULL,
+    `name` varchar(100) NOT NULL,
+    `local_url` varchar(200) NOT NULL,
+    `author` varchar(60) NOT NULL,
+    `active` int(3) NOT NULL,
+    `version` float NOT NULL,
+    `id_install` varchar(35) NOT NULL,
+    `icon` varchar(50) NOT NULL,
+    `route` varchar(150) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_search`
+  --
+
+  CREATE TABLE `victro_search` (
+    `id` int(11) NOT NULL,
+    `action` varchar(255) NOT NULL,
+    `info` text NOT NULL,
+    `who_install` varchar(200) NOT NULL,
+    `questions` varchar(600) NOT NULL,
+    `who_can_see` varchar(200) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_setting`
+  --
+
+  CREATE TABLE `victro_setting` (
+    `id` int(11) NOT NULL,
+    `setting` varchar(50) CHARACTER SET utf8 NOT NULL,
+    `value` varchar(200) CHARACTER SET utf8 NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_user`
+  --
+
+  CREATE TABLE `victro_user` (
+    `id` int(11) NOT NULL,
+    `type` int(11) DEFAULT NULL,
+    `name` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+    `username` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+    `email` varchar(60) CHARACTER SET utf8 DEFAULT NULL,
+    `victro_password` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+    `failures` int(3) NOT NULL,
+    `user_pic` varchar(255) CHARACTER SET utf8 NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  -- --------------------------------------------------------
+
+  --
+  -- Table structure for table `victro_widget`
+  --
+
+  CREATE TABLE `victro_widget` (
+    `id` int(11) NOT NULL,
+    `name` varchar(250) NOT NULL,
+    `who` varchar(10) NOT NULL,
+    `width` int(2) NOT NULL,
+    `type` varchar(15) NOT NULL,
+    `content` text NOT NULL,
+    `showbutton` tinyint(1) NOT NULL,
+    `textbutton` varchar(200) NOT NULL,
+    `actionbutton` varchar(255) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+  --
+  -- Indexes for dumped tables
+  --
+
+  --
+  -- Indexes for table `victro_addon`
+  --
+  ALTER TABLE `victro_addon`
+    ADD PRIMARY KEY (`ID`);
+
+  --
+  -- Indexes for table `victro_file`
+  --
+  ALTER TABLE `victro_file`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_log`
+  --
+  ALTER TABLE `victro_log`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_menu`
+  --
+  ALTER TABLE `victro_menu`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_notification`
+  --
+  ALTER TABLE `victro_notification`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_power`
+  --
+  ALTER TABLE `victro_power`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_power_robot`
+  --
+  ALTER TABLE `victro_power_robot`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_robot`
+  --
+  ALTER TABLE `victro_robot`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_search`
+  --
+  ALTER TABLE `victro_search`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_setting`
+  --
+  ALTER TABLE `victro_setting`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- Indexes for table `victro_user`
+  --
+  ALTER TABLE `victro_user`
+    ADD PRIMARY KEY (`id`),
+    ADD UNIQUE KEY `username_UNIQUE` (`username`);
+
+  --
+  -- Indexes for table `victro_widget`
+  --
+  ALTER TABLE `victro_widget`
+    ADD PRIMARY KEY (`id`);
+
+  --
+  -- AUTO_INCREMENT for dumped tables
+  --
+
+  --
+  -- AUTO_INCREMENT for table `victro_addon`
+  --
+  ALTER TABLE `victro_addon`
+    MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_file`
+  --
+  ALTER TABLE `victro_file`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_log`
+  --
+  ALTER TABLE `victro_log`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_menu`
+  --
+  ALTER TABLE `victro_menu`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_notification`
+  --
+  ALTER TABLE `victro_notification`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_power`
+  --
+  ALTER TABLE `victro_power`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_power_robot`
+  --
+  ALTER TABLE `victro_power_robot`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_robot`
+  --
+  ALTER TABLE `victro_robot`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_search`
+  --
+  ALTER TABLE `victro_search`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_setting`
+  --
+  ALTER TABLE `victro_setting`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_user`
+  --
+  ALTER TABLE `victro_user`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  --
+  -- AUTO_INCREMENT for table `victro_widget`
+  --
+  ALTER TABLE `victro_widget`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

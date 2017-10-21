@@ -1,0 +1,42 @@
+<?php
+
+$victro_language['install'] = "Install";
+$victro_language['uninstall'] = "Uninstall";
+$victro_language['update'] = "Update";
+$victro_language['author'] = "Author";
+$victro_language['description'] = "Description";
+$victro_language['version'] = "Version";
+$victro_language['name'] = "Name";
+$victro_language['activate'] = "Activate";
+$victro_language['actived'] = "Actived";
+$victro_language['install_db'] = 'Install Db';
+$victro_language['download'] = 'Download' ;
+$victro_language['delete'] = 'Delete' ;
+$victro_language['day'] = 'Day' ;
+$victro_language['month'] = 'Month' ;
+$victro_language['year'] = 'Year' ;
+$victro_language['hour'] = 'Hour' ;
+$victro_language['minute'] = 'Minute' ;
+$victro_language['second'] = 'Second' ;
+$victro_language['time'] = 'Time' ;
+$victro_language['menu'] = 'Menu';
+$victro_language['submenu'] = 'Submenus';
+$victro_language['permission'] = 'Permission';
+$victro_language['actions'] = 'Actions';
+$victro_language['username'] = "Username";
+$victro_language['password'] = "Password";
+$victro_language['signin'] = "Sign In";
+$victro_language['captcha'] = "Captcha";
+$victro_language['error'] = 'ERROR';
+$victro_language['widgets'] = 'Widgets' ;
+$victro_language['yes'] = 'Yes' ;
+$victro_language['no'] = 'No' ;
+$victro_language['not'] = 'Not' ;
+$victro_language['new'] = "New";
+$victro_language['name'] = "Name";
+$victro_language['width'] = "Width";
+$victro_language['type'] = "Type";
+$victro_language['edit'] = "Edit";
+$victro_language['back'] = "Back";
+$victro_language['cancel'] = "Cancel";
+?>

@@ -1,0 +1,64 @@
+<?php 
+   class victro_DBconnect {
+      private $victro_server = ""; 
+      private $victro_database = ""; 
+      private $victro_user = ""; 
+      private $victro_pass = ""; 
+      private $victro_driver = ""; 
+      private $victro_driver_array = array(); 
+      private $victro_showerror = true; 
+
+      public function defaultConnection(){
+         $this->victro_server = "[HOST]"; 
+         $this->victro_database = "[NAME]"; 
+         $this->victro_user = "[USER]"; 
+         $this->victro_pass = "[PASS]"; 
+         $this->victro_driver = "[DRIVER]"; 
+         $this->victro_driver_array = [DRIVER_ARRAY];
+         $victro_connection = $this->connect_db();
+         return($victro_connection);
+      }
+
+      public function mysqlConnection(){
+         $this->victro_server = "localhost"; 
+         $this->victro_database = "victro"; 
+         $this->victro_user = "root"; 
+         $this->victro_pass = "root"; 
+         $this->victro_driver = "mysql"; 
+         $this->victro_driver_array = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
+         $victro_connection = $this->connect_db();
+         return($victro_connection);
+      }
+      public function pgsqlConnection(){
+         $this->victro_server = "localhost"; 
+         $this->victro_database = "victro"; 
+         $this->victro_user = "root"; 
+         $this->victro_pass = "root"; 
+         $this->victro_driver = "pgsql"; 
+         $victro_connection = $this->connect_db();
+         return($victro_connection);
+      }
+
+      protected function connect_db(){ 
+         $victro_server = $this->victro_server; 
+         $victro_database = $this->victro_database; 
+         $victro_user = $this->victro_user; 
+         $victro_pass = $this->victro_pass; 
+         $victro_driver = $this->victro_driver; 
+         try{ 
+            if(count($this->victro_driver_array) > 0){
+               $victro_conn = new PDO("{$victro_driver}:host={$victro_server};dbname={$victro_database}","{$victro_user}","{$victro_pass}", $this->victro_driver_array); 
+            } else {
+               $victro_conn = new PDO("{$victro_driver}:host={$victro_server};dbname={$victro_database}","{$victro_user}","{$victro_pass}"); 
+            }
+            if($this->victro_showerror == true){
+               $victro_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            }
+         return($victro_conn); 
+         } catch(PDOException $victro_e){ 
+            echo '<center><h1>DATABASE ERROR</h1></center>'; //$victro_e->getMessage(); 
+            exit(); //$victro_e->getMessage(); 
+         } 
+      } 
+   } 
+?>
