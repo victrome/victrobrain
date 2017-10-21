@@ -2,3 +2,5 @@
 .remote-sync.json
 victro_system/victro_settings/database.php
 victro_apps/victro_robot
+victro_system/victro_install/requires
+victro_system/victro_install/writeFile.txt
