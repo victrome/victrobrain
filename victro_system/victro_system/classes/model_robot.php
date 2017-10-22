@@ -147,98 +147,22 @@ class model_robot extends victro_DBconnect {
     private function set_debug_query($victro_debug) {
         $this->victro_debug_db = $victro_debug;
     }
-    private function get_select() {    
-        $victro_select = $this->victro_select_db; 
+    private function get_select() {
+        $victro_select = $this->victro_select_db;
         return($victro_select);
     }
     private function get_from() {
-        $victro_table = $this->victro_table_db; 
+        $victro_table = $this->victro_table_db;
         return($victro_table);
-    }    
+    }
     private function get_where() {
-        $victro_where = $this->victro_where_db; 
+        $victro_where = $this->victro_where_db;
         return($victro_where);
     }
     private function get_orderby() {
         $victro_orderby = $this->victro_order_db;
         //$this->victro_order_db = null;
         return($victro_orderby);
-    }
-    /**
-     * get result count from query<BR>
-     * Exemple: <i>$bot_queryNum = $this->get_count();</i>
-     * @return Integer number of query result
-     */
-    public function get_count(){ 
-        if(is_object($this->victro_returnsDb)){
-            $victro_return = $this->victro_returnsDb->rowCount();
-            return($victro_return);
-        }
-        return(false);
-    }
-    /**
-     * get result as object<BR>
-     * Exemple: <i>$bot_queryNum = $this->get_fetch();</i>
-     * @return Array->Object array as rows, object as row
-     */
-    public function get_fetch(){
-        if(is_object($this->victro_returnsDb)){
-            $victro_return = $this->victro_returnsDb->fetchAll(PDO::FETCH_CLASS);
-            return($victro_return);
-        }
-        return(false);
-    }
-    /**
-     * get result as array<BR>
-     * Exemple: <i>$bot_queryNum = $this->get_fetch();</i>
-     * @return Array->Object array as rows, array as row
-     */
-    public function get_fetch_array(){
-        if(is_object($this->victro_returnsDb)){
-            $victro_return = $this->victro_returnsDb->fetchAll(PDO::FETCH_ASSOC);
-            return($victro_return);
-        }
-        return(false);
-    }
-    /**
-     * get the last result as object<BR>
-     * Exemple: <i>$bot_queryNum = $this->get_row();</i>
-     * @return Object result (only 1 result)
-     */
-    public function get_row(){
-        if(is_object($this->victro_returnsDb)){
-            $victro_return = $this->victro_returnsDb->fetch(PDO::FETCH_OBJ);
-            return($victro_return);
-        }
-        return(false);
-    }
-    /**
-     * get the last result as array<BR>
-     * Exemple: <i>$bot_queryNum = $this->get_row_array();</i>
-     * @return Array result (only 1 result)
-     */
-    public function get_row_array(){
-        if(is_object($this->victro_returnsDb)){
-            $victro_return = $this->victro_returnsDb->fetch(PDO::FETCH_ASSOC);
-            return($victro_return);
-        }
-        return(false);
-    }
-    /**
-     * get the last ID inserted<BR>
-     * Exemple: <i>$bot_query = $this->get_last_id();</i>
-     * @return Integer last ID inserted
-     */
-    public function get_last_id(){
-        return($this->victro_last_id);
-    }
-    /**
-     * get last query sent to database<BR>
-     * Exemple: <i>$bot_query = $this->debug_query();</i>
-     * @return String last query
-     */
-    public function debug_query() {
-        return $this->victro_debug_db;
     }
     /**
      * Sent a query to database<BR>
@@ -250,18 +174,18 @@ class model_robot extends victro_DBconnect {
         $victro_words = array("victro_password");
         $victro_check = false;
         $victro_check = $this->stringsecurity($victro_query, $victro_words);
+        $victro_resultDb = new ResultModel(null, null, null);
         if($victro_check == false){
-            
-            $this->set_debug_query($victro_query);
             try {
                 $victro_tb = $this->victro_conn()->prepare($victro_query);
                 $victro_select = $victro_tb->execute();
-                $this->victro_returnsDb = $victro_tb;
+                $victro_resultDb = new ResultModel($victro_tb, null, $victro_query);
                 if($victro_successLog == true){
                     $victro_string = "SUCCESS SQL - ".$victro_query;
                     $this->create_dbLog("SQL SUCCESS", $victro_string);
                 }
             } catch (PDOException $victro_e){
+                $victro_resultDb = new ResultModel(null, null, $victro_query);
                 $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
                 $this->create_dbLog("SQL ERROR", $victro_string);
             }
@@ -269,7 +193,7 @@ class model_robot extends victro_DBconnect {
             $victro_string = "DENIED SQL: SQL query contains not allowed fields";
             $this->create_dbLog("DENIED SQL", $victro_string);
         }
-        return($this);
+        return($victro_resultDb);
     }
     /**
      * Sent a select query to database<BR>
@@ -279,10 +203,11 @@ class model_robot extends victro_DBconnect {
      */
     protected function db_select($victro_cleanFields = true, $victro_successLog = false){
         $victro_array_select = $this->get_select();
-        $victro_array_from   = $this->get_from(); 
+        $victro_array_from   = $this->get_from();
         $victro_array_where   = $this->get_where();
         $victro_words = array("victro_");
         $victro_check = true;
+        $victro_resultDb = new ResultModel(null, null, null);
         if(count($victro_array_select) > 0 and count($victro_array_from) > 0){
             $victro_check = false;
             foreach($victro_array_from as $victro_from){
@@ -298,7 +223,7 @@ class model_robot extends victro_DBconnect {
             }
         }
         if($victro_check == false){
-            
+
             $victro_selectquery = implode(", ", $victro_array_select);
             $victro_fromquery = implode(", ", $victro_array_from);
             if(count($victro_array_where) > 0){
@@ -329,16 +254,16 @@ class model_robot extends victro_DBconnect {
             }
             $victro_joinsString = " ".implode(" ", $this->victro_joins);
             $victro_query = 'select ' . $victro_selectquery . ' from ' . $victro_fromquery . $victro_joinsString . $victro_wherequery . $victro_group . $victro_having . $victro_order . $victro_limit;
-            $this->set_debug_query($victro_query);
             try {
                 $victro_tb = $this->victro_conn()->prepare($victro_query);
                 $victro_select = $victro_tb->execute();
-                $this->victro_returnsDb = $victro_tb;
+                $victro_resultDb = new ResultModel($victro_tb, null, $victro_query);
                 if($victro_successLog == true){
                     $victro_string = "SUCCESS SQL - ".$victro_query;
                     $this->create_dbLog("SQL SUCCESS", $victro_string);
                 }
             } catch (PDOException $victro_e){
+                $victro_resultDb = new ResultModel(null, null, $victro_query);
                 $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
                 $this->create_dbLog("SQL ERROR", $victro_string);
             }
@@ -354,9 +279,10 @@ class model_robot extends victro_DBconnect {
             $this->victro_group_db = "";
             $this->victro_limit_db = "";
             $this->victro_having_db = "";
+            $this->victro_joins = array();
         }
-        return($this);
-    } 
+        return($victro_resultDb);
+    }
      /**
      * Sent a insert query to database<BR>
      * Exemple:<BR>
@@ -372,11 +298,12 @@ class model_robot extends victro_DBconnect {
         $victro_words = array("victro_");
         $victro_check = false;
         $victro_check = $this->stringsecurity($victro_table, $victro_words);
+        $victro_resultDb = new ResultModel(null, null, null);
         if (substr($victro_table, 0, 4) !== 'bot_' && substr($victro_table, 0, 7) !== 'victro_'){
             $victro_table = "bot_".$victro_table;
         }
         if($victro_check == false){
-            
+
             $victro_fields_array = array();
             foreach($victro_data as $victro_key => $victro_dat){
                 $victro_fields_array[] = "{$victro_key}";
@@ -386,7 +313,6 @@ class model_robot extends victro_DBconnect {
             $victro_values = implode(", ", $victro_values_array);
             $victro_query =  "insert into {$victro_table} ({$victro_fields}) values ({$victro_values})";
             $victro_query2 = "insert into {$victro_table} ({$victro_fields}) values ({$victro_values})";
-            $this->set_debug_query($victro_query);
             try {
                 $victro_conn = $this->victro_conn();
                 $victro_tb = $victro_conn->prepare($victro_query);
@@ -405,23 +331,22 @@ class model_robot extends victro_DBconnect {
                 }
                 unset($victro_valueinsert);
                 $victro_select = $victro_tb->execute();
-                $this->victro_last_id = $victro_conn->lastInsertId();
-                $this->victro_returnsDb = $victro_tb;
+                $victro_resultDb = new ResultModel($victro_tb, $victro_conn->lastInsertId(), $victro_query2);
                 if($victro_successLog == true){
                     $victro_string = "SUCCESS SQL - ".$victro_query2;
                     $this->create_dbLog("SQL SUCCESS", $victro_string);
                 }
             } catch (PDOException $victro_e){
+                $victro_resultDb = new ResultModel($victro_tb, null, $victro_query);
                 $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
                 $this->create_dbLog("SQL ERROR", $victro_string);
             }
-            $this->set_debug_query($victro_query2);
         } else {
             $victro_string = "DENIED SQL: SQL query contains not allowed fields";
             $this->create_dbLog("DENIED SQL", $victro_string);
         }
         $this->victro_where_db = array();
-        return($this);
+        return($victro_resultDb);
     }
     /**
      * Sent a update query to database<BR>
@@ -441,11 +366,12 @@ class model_robot extends victro_DBconnect {
         $victro_words = array("victro_");
         $victro_check = false;
         $victro_check = $this->stringsecurity($victro_table, $victro_words);
+        $victro_resultDb = new ResultModel(null, null, null);
         if (substr($victro_table, 0, 4) !== 'bot_' && substr($victro_table, 0, 7) !== 'victro_'){
             $victro_table = "bot_".$victro_table;
         }
         if($victro_check == false){
-            
+
             if(count($victro_array_where) > 0){
                 $victro_wherequery = " where ".implode(" ", $victro_array_where);
                 $victro_fields_array = array();
@@ -455,7 +381,6 @@ class model_robot extends victro_DBconnect {
                 $victro_fields = implode(", ", $victro_fields_array);
                 $victro_query = "update {$victro_table} set {$victro_fields} {$victro_wherequery}";
                 $victro_query2 = "update {$victro_table} set {$victro_fields} {$victro_wherequery}";
-                $this->set_debug_query($victro_query);
                 try {
                     $victro_tb = $this->victro_conn()->prepare($victro_query);
                     foreach($victro_data as $victro_key => $victro_dat){
@@ -469,12 +394,13 @@ class model_robot extends victro_DBconnect {
                         }
                     }
                     $victro_select = $victro_tb->execute();
-                    $this->victro_returnsDb = $victro_tb;
+                    $victro_resultDb = new ResultModel($victro_tb, null, $victro_query);
                     if($victro_successLog == true){
                         $victro_string = "SUCCESS SQL - ".$victro_query2;
                         $this->create_dbLog("SQL SUCCESS", $victro_string);
                     }
                 } catch (PDOException $victro_e){
+                    $victro_resultDb = new ResultModel(null, null, $victro_query);
                     $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
                     $this->create_dbLog("SQL ERROR", $victro_string);
                 }
@@ -488,7 +414,7 @@ class model_robot extends victro_DBconnect {
             $this->create_dbLog("DENIED SQL", $victro_string);
         }
         $this->victro_where_db = array();
-        return($this);
+        return($victro_resultDb);
     }
     /**
      * Sent a delete query to database<BR>
@@ -506,24 +432,24 @@ class model_robot extends victro_DBconnect {
         $victro_words = array("victro_");
         $victro_check = false;
         $victro_check = $this->stringsecurity($victro_table, $victro_words);
-        
+        $victro_resultDb = new ResultModel(null, null, null);
         if($victro_check == false){
-            
+
             if(count($victro_array_where) > 0){
                 $victro_wherequery = " where ".implode(" ", $victro_array_where);
                 $victro_query = "delete from {$victro_table} {$victro_wherequery}";
-                $this->set_debug_query($victro_query);
                 try {
                     $victro_tb = $this->victro_conn()->prepare($victro_query);
                     $victro_select = $victro_tb->execute();
-                    $this->victro_returnsDb = $victro_tb;
+                    $victro_resultDb = new ResultModel($victro_tb, null, $victro_query);
                     if($victro_successLog == true){
                         $victro_string = "SUCCESS SQL - ".$victro_query;
                         $this->create_dbLog("SQL SUCCESS", $victro_string);
                     }
                 } catch (PDOException $victro_e){
-                    $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
-                    $this->create_dbLog("SQL ERROR", $victro_string);
+                  $victro_resultDb = new ResultModel(null, null, $victro_query);
+                  $victro_string = "SQL SELECT ERROR- ".$victro_e->getMessage();
+                  $this->create_dbLog("SQL ERROR", $victro_string);
                 }
             } else {
                 $victro_string = "DENIED SQL: You need to specify at least one where clause";
@@ -534,7 +460,7 @@ class model_robot extends victro_DBconnect {
             $this->create_dbLog("DENIED SQL", $victro_string);
         }
         $this->victro_where_db = array();
-        return($this);
+        return($victro_resultDb);
     }
     private function create_dbLog($victro_type, $victro_string){
         $victro_logTable = "(".implode(",", $this->victro_table_db)."";
@@ -612,7 +538,7 @@ class model_robot extends victro_DBconnect {
     }
      /**
      * Load a view file<BR>
-     * This method can return a include view or html of itself 
+     * This method can return a include view or html of itself
      * Exemple: <i>$this->view("basic", array('ID', 1), false);</i>
      * Exemple: <i>$bot_html = $this->view("basic", array('ID', 1), true);</i>
      * @param String $victro_name_view name of views file
@@ -670,7 +596,7 @@ class model_robot extends victro_DBconnect {
      * Exemple: <i>$bot_value = $this->input("NAME", "GET"); -- Filter as GET</i>
      * Exemple: <i>$bot_value = $this->input("NAME", "GET_POST"); -- Try to filter as POST if nothing is found try to filter as GET </i>
      * Exemple: <i>$bot_value = $this->input("NAME", "POST_GET"); -- Try to filter as GET if nothing is found try to filter as POST </i>
-     * @param String $victro_name name Param GET or POST 
+     * @param String $victro_name name Param GET or POST
      * @param String $victro_type type of filter (POST, GET, GET_POST, POST_GET)
      * @param String $victro_filter type of filter (check PHP documentation of 'filter_input')
      * @return String if nothing is found it returns false else it return a value it can be (String, Boolean, Integer...)
@@ -700,7 +626,7 @@ class model_robot extends victro_DBconnect {
      */
     protected function victro_newnotification($victro_noti_subject, $victro_noti_text = '', $victro_noti_icon = 'fa fa-bell-o', $victro_noti_touser = 't:1', $victro_noti_link = 'system/notification', $victro_whosend = null) {
         GLOBAL $victro_robot;
-        
+
         $victro_tb = $this->victro_conn()->prepare("insert into victro_notifications values (null, :subject , :text, :icon, :link, '0', :touser, :send)");
         $victro_tb->bindParam(":subject", $victro_noti_subject, PDO::PARAM_STR);
         $victro_tb->bindParam(":text", $victro_noti_text, PDO::PARAM_STR);
@@ -1035,4 +961,93 @@ class model_robot extends victro_DBconnect {
         $_SESSION['bot_lang'] = $victro_lang;
     }
 }
+
+class ResultModel{
+  private $victro_last_id = 0;
+  private $victro_returnsDb;
+  private $victro_debug_db = "";
+
+  function __construct($victro_returnsDb, $victro_last_id ,$victro_debug_db) {
+    $this->victro_last_id = $victro_last_id;
+    $this->victro_returnsDb = $victro_returnsDb;
+    $this->victro_debug_db = $victro_debug_db;
+  }
+
+  /**
+   * get result count from query<BR>
+   * Exemple: <i>$bot_queryNum = $this->get_count();</i>
+   * @return Integer number of query result
+   */
+   public function get_count(){
+       if(is_object($this->victro_returnsDb)){
+           $victro_return = $this->victro_returnsDb->rowCount();
+           return($victro_return);
+       }
+       return(false);
+   }
+   /**
+    * get result as object<BR>
+    * Exemple: <i>$bot_queryNum = $this->get_fetch();</i>
+    * @return Array->Object array as rows, object as row
+    */
+   public function get_fetch(){
+       if(is_object($this->victro_returnsDb)){
+           $victro_return = $this->victro_returnsDb->fetchAll(PDO::FETCH_CLASS);
+           return($victro_return);
+       }
+       return(false);
+   }
+   /**
+    * get result as array<BR>
+    * Exemple: <i>$bot_queryNum = $this->get_fetch();</i>
+    * @return Array->Object array as rows, array as row
+    */
+   public function get_fetch_array(){
+       if(is_object($this->victro_returnsDb)){
+           $victro_return = $this->victro_returnsDb->fetchAll(PDO::FETCH_ASSOC);
+           return($victro_return);
+       }
+       return(false);
+   }
+   /**
+    * get the last result as object<BR>
+    * Exemple: <i>$bot_queryNum = $this->get_row();</i>
+    * @return Object result (only 1 result)
+    */
+   public function get_row(){
+       if(is_object($this->victro_returnsDb)){
+           $victro_return = $this->victro_returnsDb->fetch(PDO::FETCH_OBJ);
+           return($victro_return);
+       }
+       return(false);
+   }
+   /**
+    * get the last result as array<BR>
+    * Exemple: <i>$bot_queryNum = $this->get_row_array();</i>
+    * @return Array result (only 1 result)
+    */
+   public function get_row_array(){
+       if(is_object($this->victro_returnsDb)){
+           $victro_return = $this->victro_returnsDb->fetch(PDO::FETCH_ASSOC);
+           return($victro_return);
+       }
+       return(false);
+   }
+   /**
+    * get the last ID inserted<BR>
+    * Exemple: <i>$bot_query = $this->get_last_id();</i>
+    * @return Integer last ID inserted
+    */
+   public function get_last_id(){
+       return($this->victro_last_id);
+   }
+   /**
+    * get last query sent to database<BR>
+    * Exemple: <i>$bot_query = $this->debug_query();</i>
+    * @return String last query
+    */
+   public function debug_query() {
+       return $this->victro_debug_db;
+   }
+ }
 ?>
