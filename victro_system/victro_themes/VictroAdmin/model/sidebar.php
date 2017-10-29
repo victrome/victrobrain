@@ -2,14 +2,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
-      <div class="user-panel">
-        <div class="pull-left image" style="color:white">
-          <i class="fa fa-user"></i>
-        </div>
-        <div class="pull-left info">
-          <p><?php echo $_SESSION['user'];?></p>
-        </div>
-      </div>
+      <BR>
       <!-- search form -->
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
@@ -25,7 +18,7 @@
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
         <?php $victro_maker->getmenurobot(); ?>
-        
+
       </ul>
     </section>
     <!-- /.sidebar -->

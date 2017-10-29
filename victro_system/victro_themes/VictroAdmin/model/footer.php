@@ -3,9 +3,9 @@
       <b>Version</b> <?php echo VERSION; ?>
     </div>
     <strong><?php if(date('Y') > 2016 ){ ?>
-    Copyright &#xa9; 2016 - <?php echo date('Y'); ?> <a href="http://victrobrain.com">VictroBrain</a>
+    Copyright &#xa9; 2016 - <?php echo date('Y'); ?> <a target="_blank" href="http://victrobrain.com">VictroBrain</a>
     <?php } else { ?>
-        Copyright &#xa9; 2016 <a href="http://victrobrain.com">VictroBrain</a>
+        Copyright &#xa9; 2016 <a target="_blank" href="http://victrobrain.com">VictroBrain</a>
     <?php } ?></strong> All rights
     reserved.
   </footer>

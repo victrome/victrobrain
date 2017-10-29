@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 contato.
+ * Copyright 2017 Jean Victor Mendes dos Santos.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -165,14 +165,14 @@ class robot {
 
     // END BASIC INFO
     // MENU INFO
-    public function menu($type, $value) {
-        $this->menu[$this->last_menu_key]['menu'] = array($value, $type);
+    public function menu($type, $value, $icon = "fa fa-microchip") {
+        $this->menu[$this->last_menu_key]['menu'] = array($value, $type, $icon);
         $this->last_menu_key++;
         return($this);
     }
 
-    public function submenu($value, $type) {
-        $this->menu[$this->last_menu_key][$value] = $type;
+    public function submenu($value, $type, $icon = "fa fa-circle") {
+        $this->menu[$this->last_menu_key][$value] = array($type, $icon);
         return($this);
     }
 
@@ -248,7 +248,7 @@ class robot {
                             $victro_if = "";
                         }
                     }
-                    
+
                     $victro_sqlcreatequery = "CREATE TABLE {$victro_if} {$victro_table['name']}({$victro_sqlcolumns}) ENGINE={$victro_engine};";
                     $_SESSION['query_bot']['create'][] = $victro_sqlcreatequery;
                     //echo "CREATE TABLE IF NOT EXISTS bot_{$victro_table['name']}({$victro_sqlcolumns}) ENGINE=MyISAM;<BR>";
@@ -366,7 +366,7 @@ class robot {
                         $_SESSION['query_bot']['delete'][] = $victro_sqldel;
                     }
                 }
-                
+
             }
             if(isset($victro_table['foreignkey'])){
                 $victro_sqlforeignkey = array();
@@ -376,7 +376,7 @@ class robot {
                     $_SESSION['query_bot']['foreignkey'][] = $victro_sqlforeignkey;
                     $victro_sqlforeignkey = null;
                 }
-            } 
+            }
             unset($victro_field);
             unset($victro_type);
             unset($victro_null);
@@ -471,7 +471,7 @@ class robot {
         $victro_tb->bindParam(":id", $victro_id_install, PDO::PARAM_STR);
         $victro_tb->execute();
         if($victro_tb->rowCount() >= 1) {
-            $victro_row = $victro_tb->fetch(PDO::FETCH_ASSOC);    
+            $victro_row = $victro_tb->fetch(PDO::FETCH_ASSOC);
             $victro_bt = $victro_row['id'];
         } else {
             $victro_bt = 0;
@@ -521,7 +521,7 @@ class robot {
         $victro_submenu = 0;
         if($victro_id > 0){
             foreach($this->menu as $victro_key1 => $victro_menu1){
-                
+
                 foreach($victro_menu1 as $victro_key => $victro_menu){
                     if($victro_key == 'menu'){
                         $victro_tb4 = $victro_conn->prepare("select id from victro_menu where name = :name and id_robot = :id_robot");
@@ -529,8 +529,9 @@ class robot {
                         $victro_tb4->bindParam(":id_robot", $victro_id, PDO::PARAM_INT);
                         $victro_tb4->execute();
                         if($victro_tb4->rowCount() == 0){
-                            $victro_tb2 = $victro_conn->prepare("insert into victro_menu (name, submenu, id_robot, active, who_see) values (:name, 0, :id_robot, 1, :permission)");
+                            $victro_tb2 = $victro_conn->prepare("insert into victro_menu (name, submenu, id_robot, active, who_see, icon) values (:name, 0, :id_robot, 1, :permission, :icon)");
                             $victro_tb2->bindParam(":name", $victro_menu[1], PDO::PARAM_STR);
+                            $victro_tb2->bindParam(":icon", $victro_menu[2], PDO::PARAM_STR);
                             $victro_tb2->bindParam(":id_robot", $victro_id, PDO::PARAM_INT);
                             $victro_tb2->bindParam(":permission", $victro_menu[0], PDO::PARAM_STR);
                             $victro_tb2 = $victro_tb2->execute();
@@ -538,8 +539,9 @@ class robot {
                         } else {
                             $victro_row = $victro_tb4->fetch(PDO::FETCH_ASSOC);
                             $victro_botid = $victro_row['id'];
-                            $victro_tb5 = $victro_conn->prepare("update victro_menu set name = :name, active = 1, who_see = :permission where id = :id");
+                            $victro_tb5 = $victro_conn->prepare("update victro_menu set name = :name, active = 1, who_see = :permission, icon = :icon where id = :id");
                             $victro_tb5->bindParam(":name", $victro_menu[1], PDO::PARAM_STR);
+                            $victro_tb5->bindParam(":icon", $victro_menu[2], PDO::PARAM_STR);
                             $victro_tb5->bindParam(":id", $victro_botid, PDO::PARAM_INT);
                             $victro_tb5->bindParam(":permission", $victro_menu[0], PDO::PARAM_STR);
                             $victro_tb5 = $victro_tb5->execute();
@@ -552,19 +554,21 @@ class robot {
                         $victro_tb4->bindParam(":submenu", $victro_submenu, PDO::PARAM_INT);
                         $victro_tb4->execute();
                         if($victro_tb4->rowCount() == 0){
-                            $victro_tb2 = $victro_conn->prepare("insert into victro_menu (name, submenu, id_robot, active, who_see) values (:name, :submenu, :id_robot, 1, :permission)");
+                            $victro_tb2 = $victro_conn->prepare("insert into victro_menu (name, submenu, id_robot, active, who_see, icon) values (:name, :submenu, :id_robot, 1, :permission, :icon)");
                             $victro_tb2->bindParam(":name", $victro_key, PDO::PARAM_STR);
+                            $victro_tb2->bindParam(":icon", $victro_menu[1], PDO::PARAM_STR);
                             $victro_tb2->bindParam(":id_robot", $victro_id, PDO::PARAM_INT);
-                            $victro_tb2->bindParam(":permission", $victro_menu, PDO::PARAM_STR);
+                            $victro_tb2->bindParam(":permission", $victro_menu[0], PDO::PARAM_STR);
                             $victro_tb2->bindParam(":submenu", $victro_submenu, PDO::PARAM_INT);
                             $victro_tb2 = $victro_tb2->execute();
                         } else {
                             $victro_row = $victro_tb4->fetch(PDO::FETCH_ASSOC);
                             $victro_botid = $victro_row['id'];
-                            $victro_tb5 = $victro_conn->prepare("update victro_menu set name = :name, active = 1, who_see = :permission where id = :id");
+                            $victro_tb5 = $victro_conn->prepare("update victro_menu set name = :name, active = 1, who_see = :permission, icon = :icon where id = :id");
                             $victro_tb5->bindParam(":name", $victro_key, PDO::PARAM_STR);
+                            $victro_tb5->bindParam(":icon", $victro_menu[1], PDO::PARAM_STR);
                             $victro_tb5->bindParam(":id", $victro_botid, PDO::PARAM_INT);
-                            $victro_tb5->bindParam(":permission", $victro_menu, PDO::PARAM_STR);
+                            $victro_tb5->bindParam(":permission", $victro_menu[0], PDO::PARAM_STR);
                             $victro_tb5 = $victro_tb5->execute();
                         }
                     }

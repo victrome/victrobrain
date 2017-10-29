@@ -46,6 +46,15 @@
               </div>
             </a>
           </li>
+          <li>
+            <a href="<?php echo SITE_URL."sys/update"; ?>">
+              <i class="menu-icon fa fa-cloud-download  bg-blue"></i>
+
+              <div class="menu-info">
+                  <h4 class="control-sidebar-subheading"><?php victro_translate("Check Update"); ?></h4>
+              </div>
+            </a>
+          </li>
         </ul>
       </div>
       <!-- /.tab-pane -->

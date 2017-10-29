@@ -14,7 +14,7 @@
 	}
 	function basic_css(){
                 echo '<link rel="stylesheet" href="'.THEME.'bootstrap/css/bootstrap.min.css">';
-                echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">';
+                echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">';
                 echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">';
                 echo '<link rel="stylesheet" href="'.THEME.'plugins/jvectormap/jquery-jvectormap-1.2.2.css">';
                 echo '<link rel="stylesheet" href="'.THEME.'dist/css/AdminLTE.css">';
@@ -59,4 +59,3 @@
 				  }
 				});</script>"; */
 	}
-	
