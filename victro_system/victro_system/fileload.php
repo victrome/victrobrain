@@ -14,13 +14,13 @@
 			$victro_ret['id'] = $_GET['id'];
 		} else if(isset($_GET['name'])){
 			$victro_ret['name'] = $_GET['name'];
-		} 
+		}
 		$victro_file = $victro_maker->load_file_db($victro_ret);
 		if(!isset($victro_file['error'])){
 			$victro_folder = SITE_URL.'victro_apps/victro_storage/';
 			$victro_folder1 = 'victro_apps/victro_storage/';
-			if($victro_file['type'] == "png" or $victro_file['type'] == "PNG" or $victro_file['type'] == "jpg" or 
-			   $victro_file['type'] == "JPG" or $victro_file['type'] == "gif" or $victro_file['type'] == "GIF" or 
+			if($victro_file['type'] == "png" or $victro_file['type'] == "PNG" or $victro_file['type'] == "jpg" or
+			   $victro_file['type'] == "JPG" or $victro_file['type'] == "gif" or $victro_file['type'] == "GIF" or
 			   $victro_file['type'] == "JPEG" or $victro_file['type'] == "jpeg"){
 					if(file_exists($victro_folder1.$victro_file['folder'].'/'.$victro_file['name'])){
 						$victro_filecont = file_get_contents($victro_folder.$victro_file['folder'].'/'.$victro_file['name']);
@@ -61,9 +61,4 @@
 			exit($victro_file['error']);
 		}
 	}
-
-	
-	
-	
- 
 ?>

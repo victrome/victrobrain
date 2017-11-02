@@ -5,6 +5,9 @@
 			$victro_sendfile = $_FILES['picuser'];
 			$victro_pass = time();
 			$_UP['pasta'] = '../../victro_apps/victro_storage/system/users/';
+			if(!is_dir('../../victro_apps/victro_storage/system')){
+				mkdir('../../victro_apps/victro_storage/system');
+			}
 			if(!is_dir($_UP['pasta'])){
 				mkdir($_UP['pasta']);
 			}
@@ -24,7 +27,7 @@
 			$victro_nome_final = md5(time().$victro_sendfile['name'].$victro_numfile).'.victro';
 			$victro_fp = fopen($_UP['pasta'].$victro_nome_final, "a");
 			$victro_escreve = fwrite($victro_fp, $victro_convert_to_victro1);
-			fclose($victro_fp); 
+			fclose($victro_fp);
 			$victro_value['name'] = $victro_nome_final;
 			$victro_value['type'] = $victro_extensao;
 			$victro_access = 1;
@@ -39,7 +42,7 @@
 			$victro_type = 5;
 			$victro_fall = 0;
 			$victro_tb2 = $victro_connect->prepare("insert into victro_user values(null, :type, :name, :username, :email, :pass, :fall, '{$victro_nome_final}')");
-			$victro_tb2->bindParam(":name", $victro_name, PDO::PARAM_STR); 
+			$victro_tb2->bindParam(":name", $victro_name, PDO::PARAM_STR);
 			$victro_tb2->bindParam(":type", $victro_type, PDO::PARAM_INT);
 			$victro_tb2->bindParam(":username", $victro_username, PDO::PARAM_STR);
 			$victro_tb2->bindParam(":email", $victro_email, PDO::PARAM_STR);

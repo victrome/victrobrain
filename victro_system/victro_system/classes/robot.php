@@ -305,7 +305,7 @@ class robot {
                                         $victro_sqlalter .= " COMMENT '{$victro_column['comments']}'";
                                     }
                                     if (isset($victro_column['index']) and $victro_column['index'] != null) {
-                                        $victro_sqlindex = "Alter {$victro_table['name']} ADD {$victro_column['index']} (`{$victro_column['name']}`);";
+                                        $victro_sqlindex = "Alter table {$victro_table['name']} ADD {$victro_column['index']} (`{$victro_column['name']}`);";
                                         $_SESSION['query_bot']['index'][] = $victro_sqlindex;
                                     }
                                     $victro_sqlalter2 = "Alter table " . $victro_table['name'] . " modify column " . $victro_sqlalter . ';';
