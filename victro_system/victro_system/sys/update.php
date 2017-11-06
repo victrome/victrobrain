@@ -34,6 +34,9 @@ $status = curl_getinfo($c, CURLINFO_HTTP_CODE);
 
 if(isset($_GET['update'])){
   $filezip = 'http://victrobrain.com/site/site/updateForce/'.VERSION;
+  if(!is_dir("victro_system/victro_update/")){
+    mkdir('victro_system/victro_update');
+  }
   if(!is_dir("victro_system/victro_update/victro_new")){
     mkdir('victro_system/victro_update/victro_new');
   }
