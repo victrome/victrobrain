@@ -15,7 +15,8 @@ if (!isset($_SESSION['iduser'])) {
         <link href="<?php echo SITE_URL; ?>victro_system/victro_system/js/jquery.terminal.min.css" rel="stylesheet"/>
         <script src="<?php echo SITE_URL; ?>victro_system/victro_system/js/jquery-1.7.1.min.js"></script>
         <script src="<?php echo SITE_URL; ?>victro_system/victro_system/js/jquery.mousewheel-min.js"></script>
-        <script src="<?php echo SITE_URL; ?>victro_system/victro_system/js/jquery.terminal.min.js"></script>
+        <script src="<?php echo SITE_URL; ?>victro_system/victro_system/js/keyboard.js"></script>
+        <script src="<?php echo SITE_URL; ?>victro_system/victro_system/js/jquery.terminal-1.9.0.js"></script>
 
         <script>
             var isAlreadyConnected = <?php echo $victro_logout; ?>;
