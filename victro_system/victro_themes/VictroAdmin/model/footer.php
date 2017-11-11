@@ -33,6 +33,8 @@
           <!-- /.modal-dialog -->
         </div>
 <script>
+  SITE_URL = '<?php echo SITE_URL; ?>';
+  
     function system_function(params){
         $.ajax({
             type: "POST",

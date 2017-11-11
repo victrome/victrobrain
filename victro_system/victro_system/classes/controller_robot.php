@@ -11,7 +11,7 @@ class controller_robot{
      * @return Object
      */
     protected function addon($victro_addon_id){
-        include('addon.php');
+        include_once('addon.php');
         $victro_addon = new addon();
         $victro_setted = $victro_addon->set_addon($victro_addon_id, $this);
         return($victro_setted);
@@ -70,7 +70,7 @@ class controller_robot{
     }
     /**
      * Load a view file<BR>
-     * This method can return a include view or html of itself 
+     * This method can return a include view or html of itself
      * Exemple: <i>$this->view("basic", array('ID', 1), false);</i>
      * Exemple: <i>$bot_html = $this->view("basic", array('ID', 1), true);</i>
      * @param String $victro_name_view name of views file
@@ -126,7 +126,7 @@ class controller_robot{
         } else {
             return(false);
         }
-    }  
+    }
     /**
      * Filter INPUT or GET<BR>
      * This method filters INPUT or GET params
@@ -134,7 +134,7 @@ class controller_robot{
      * Exemple: <i>$bot_value = $this->input("NAME", "GET"); -- Filter as GET</i>
      * Exemple: <i>$bot_value = $this->input("NAME", "GET_POST"); -- Try to filter as POST if nothing is found try to filter as GET </i>
      * Exemple: <i>$bot_value = $this->input("NAME", "POST_GET"); -- Try to filter as GET if nothing is found try to filter as POST </i>
-     * @param String $victro_name name Param GET or POST 
+     * @param String $victro_name name Param GET or POST
      * @param String $victro_type type of filter (POST, GET, GET_POST, POST_GET)
      * @param String $victro_filter type of filter (check PHP documentation of 'filter_input')
      * @return String if nothing is found it returns false else it return a value it can be (String, Boolean, Integer...)
@@ -282,7 +282,7 @@ class controller_robot{
     /**
      * This method creates forms
      * @deprecated since version 0.8
-     * @return view_robot Pre design 
+     * @return view_robot Pre design
      */
     protected function design_view(){
         require_once('view_robot.php');
@@ -297,7 +297,7 @@ class controller_robot{
     }
     /**
      * This method allow you to create a var with assets files
-     * 
+     *
      */
     public function assets($victro_var1 = "", $victro_var2 = "", $victro_var3 = "", $victro_var4 = "", $victro_var5 = "", $victro_var6 = "", $victro_var7 = "", $victro_var8 = ""){
         if($victro_var1 == ""){
@@ -326,11 +326,8 @@ class controller_robot{
         if(file_exists($victro_final_file)){
             echo file_get_contents($victro_final_file);
         }
-        
+
     }
-    /**
-     * This method set a language to bot_translate function
-     */
     protected function language($victro_lang){
         $_SESSION['bot_lang'] = $victro_lang;
     }

@@ -29,7 +29,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)">
+            <a href="javascript:open_addon()">
               <i class="menu-icon fa fa-puzzle-piece bg-blue"></i>
 
               <div class="menu-info">

@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 contato.
@@ -26,12 +26,24 @@
 if (!defined('PROTECT')) {
     exit('NO ACCESS');
 }
-if (!isset($_SESSION['typeuser'])){
-    header('location: ' . SITE_URL . '/system/login');
-}
 require_once('victro_system/victro_system/classes/addon.php');
 $victro_maker = new addon();
-$victro_token = $victro_maker->input("TOKEN", "GET");
-$victro_id = $victro_maker->input("id", "GET");
+$victro_params = (array) json_decode($victro_maker->input("JSON_VAR", "POST"));
+$victro_token = $victro_params['TOKEN'];
+$victro_id = $victro_params['ID'];
 $victro_return = $victro_maker->authenticate($victro_id, $victro_token);
+$victro_TOKENS = "";
+if($victro_return['ID_CHIP'] > 0){
+  $victro_TOKENS = "TOKEN=OK&";
+  $victro_TOKENS .= "MODEL=".$victro_return['MODEL']."&";
+  $victro_TOKENS .= "ID_ADDON=V".$victro_return['ID_CHIP']."R&";
+  $victro_TOKENS .= "ID=v".$victro_return['ID_CHIP']."&";
+  $victro_TOKENS .= "VERSION=".$victro_return['VERSION']."&";
+} else {
+  $victro_TOKENS = "TOKEN=ERROR&";
+  $victro_TOKENS .= "MODEL=".$victro_return['MODEL']."&";
+  $victro_TOKENS .= "VERSION=".$victro_return['VERSION']."&";
+  $victro_TOKENS .= "ID_ADDON=".$victro_return['ID_CHIP']."&";
+}
+echo "(VICTRO_ADDON){$victro_TOKENS}(END_VICTRO_ADDON)";
 ?>
