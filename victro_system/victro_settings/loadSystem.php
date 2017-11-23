@@ -49,6 +49,10 @@ if (defined('URL_0')) {
     include(PATH_SYSTEM.PATH_SYSTEM. 'sys/terminal.php');
     exit;
   }
+if (URL_0 == "loadfile") {
+    include(PATH_SYSTEM.PATH_SYSTEM. 'sys/fileload.php');
+    exit;
+  }
   if (URL_0 == "sys" and defined("URL_1") and URL_1 == "command") {
     include(PATH_SYSTEM.PATH_SYSTEM. 'sys/command.php');
     exit;

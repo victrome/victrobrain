@@ -552,7 +552,7 @@ class VictroFunc extends victro_DBconnect {
                 try {
                     $victro_tb->execute();
                 } catch (PDOException $victro_e) {
-                    
+
                 }
             }
         }
@@ -562,7 +562,7 @@ class VictroFunc extends victro_DBconnect {
                 try {
                     $victro_tb->execute();
                 } catch (PDOException $victro_e) {
-                    
+
                 }
             }
         }
@@ -572,7 +572,7 @@ class VictroFunc extends victro_DBconnect {
                 try {
                     $victro_tb->execute();
                 } catch (PDOException $victro_e) {
-                    
+
                 }
             }
         }
@@ -582,7 +582,7 @@ class VictroFunc extends victro_DBconnect {
                 try {
                     $victro_tb->execute();
                 } catch (PDOException $victro_e) {
-                    
+
                 }
             }
         }
@@ -592,7 +592,7 @@ class VictroFunc extends victro_DBconnect {
                 try {
                     $victro_tb->execute();
                 } catch (PDOException $victro_e) {
-                    
+
                 }
             }
         }
@@ -1012,7 +1012,7 @@ class VictroFunc extends victro_DBconnect {
             if ($victro_arquivo != "." && $victro_arquivo != "..") {
                 $victro_path = $victro_pasta . "/" . $victro_arquivo;
                 for ($victro_c = 0; $victro_c < $victro_i; $victro_c++) {
-                    
+
                 }
                 if (is_dir($victro_path)) {
                     //echo "<b>+ ".$victro_arquivo."</b><br>\n";
@@ -1122,7 +1122,7 @@ class VictroFunc extends victro_DBconnect {
 
     public function send_file_db(array $victro_values) {
         $victro_conn = $this->defaultConnection();
-        $victro_tb = $victro_conn->prepare("insert into victro_files values(null, :name, :type, :accessible, :data, :id, :pass, :folder)");
+        $victro_tb = $victro_conn->prepare("insert into victro_file values(null, :name, :type, :accessible, :data, :id, :pass, :folder)");
         $victro_tb->bindParam(":name", $victro_values['name'], PDO::PARAM_STR);
         $victro_tb->bindParam(":type", $victro_values['type'], PDO::PARAM_STR);
         $victro_tb->bindParam(":accessible", $victro_values['accessible'], PDO::PARAM_INT);
@@ -1146,7 +1146,7 @@ class VictroFunc extends victro_DBconnect {
         } else {
             $victro_where = "1 = 2";
         }
-        $victro_tb = $victro_conn->prepare("select name, type, f_accessible, f_password, folder from victro_files where {$victro_where}");
+        $victro_tb = $victro_conn->prepare("select name, type, f_accessible, f_password, folder from victro_file where {$victro_where}");
         if (isset($victro_values['id']) and isset($victro_values['name'])) {
             $victro_tb->bindParam(":id", $victro_values['id'], PDO::PARAM_INT);
             $victro_tb->bindParam(":name", $victro_values['name'], PDO::PARAM_STR);
@@ -1333,7 +1333,7 @@ class VictroFunc extends victro_DBconnect {
                     $victro_DataAtual = $victro_pl['last_run'];
                     $victro_date_time = new DateTime($victro_DataAtual);
                     $victro_diff = $victro_date_time->diff(new DateTime($victro_DataFuturo));
-                    //echo $victro_diff->format( '%a %y year(s), %m month(s), %d day(s), %H hour(s), %i minute(s) and %s second(s)' ); 
+                    //echo $victro_diff->format( '%a %y year(s), %m month(s), %d day(s), %H hour(s), %i minute(s) and %s second(s)' );
                     $victro_total_year = $victro_diff->format('%y');
                     $victro_month = $victro_diff->format('%m');
                     $victro_total_month = ($victro_total_year * 12) + $victro_month;

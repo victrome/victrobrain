@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Jean Victor Mendes dos Santos.
@@ -28,8 +28,7 @@ if (!defined('PROTECT')) {
     exit('NO ACCESS');
 }
 if (!isset($_SESSION['typeuser']))
-    header('location: ' . SITE_URL . '/system/login');
+    header('location: ' . SITE_URL . '/sys/login');
 require_once(PATH_SYSTEM.PATH_SETTINGS.'translation.php');
 require_once(THEME_FULLDIR . '404.php');
 ?>
-

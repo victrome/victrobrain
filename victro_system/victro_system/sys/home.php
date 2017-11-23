@@ -3,7 +3,7 @@ if (!defined('PROTECT')) {
     exit('NO ACCESS');
 }
 if (!isset($_SESSION['typeuser']))
-    header('location: ' . SITE_URL . '/system/login');
+    header('location: ' . SITE_URL . '/sys/login');
 require_once(PATH_SYSTEM.PATH_SETTINGS.'mainMethod.class.php');
 $victro_maker = new VictroFunc();
 $victro_widgets = ($victro_maker->home_widgets($_SESSION['typeuser']));

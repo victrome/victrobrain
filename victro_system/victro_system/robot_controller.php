@@ -2,7 +2,7 @@
     exit('NO ACCESS');
 }
 require_once('victro_system/victro_settings/mainMethod.class.php');
-$victro_maker = new VictroFunc(); 
+$victro_maker = new VictroFunc();
 $victro_datap = explode('/', $victro_datas_robot);
 if (!isset($victro_datap[2]) or empty($victro_datap[2])) {
     $victro_datap[2] = 'index';
@@ -64,7 +64,7 @@ if ($victro_t_robot[1] != 0) {
                 } else {
                     $victro_bot_url1 = explode("/", $victro_robot['b_link_array']);
                 }
-                $victro_bot_url2 = count($victro_bot_url1); 
+                $victro_bot_url2 = count($victro_bot_url1);
                 for($i = 0; $i  < $victro_bot_url2; $i++){
                     unset($victro_bot_param[$i]);
                 }
@@ -77,7 +77,7 @@ if ($victro_t_robot[1] != 0) {
             } else if ($_SESSION['typeuser'] == 5) { // else of method exists
                 $victro_error_pag = 'nomethod';
                 $victro_content = 'victro_system/victro_system/errors.php';
-            } 
+            }
         } else if ($_SESSION['typeuser'] == 5) { // else of check extents
             $victro_error_pag = 'noextend';
             $victro_content = 'victro_system/victro_system/errors.php';
@@ -90,6 +90,6 @@ if ($victro_t_robot[1] != 0) {
 
     // Function to load var to model
 
-    
+
 }
 ?>

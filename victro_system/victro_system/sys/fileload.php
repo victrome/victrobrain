@@ -1,6 +1,6 @@
 <?php
 	if(!defined('PROTECT')){ exit('NO ACCESS'); }
-	if(!isset($_SESSION['typeuser'])) header('location: '.SITE_URL.'/system/login');
+	if(!isset($_SESSION['typeuser'])) header('location: '.SITE_URL.'sys/login');
 	require_once('victro_system/victro_settings/mainMethod.class.php');
 	$victro_maker = new VictroFunc();
 	if(isset($_GET['id']) or isset($_GET['name'])){

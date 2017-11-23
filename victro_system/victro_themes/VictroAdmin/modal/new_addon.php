@@ -58,31 +58,44 @@ function ToUp(e1){
   $(e1).val($(e1).val().toUpperCase());
 }
 function tryCon(){
-  var actualHost = $('#host').val();
-  var nowHTML = $('#victro-modal-body').html();
-  $.ajax({
-		type: "GET",
-		global: false,
-		url: "http://"+actualHost+".local/config.vic",
-		data: {TYPE: $('#wifi').val(), SSID: $('#ssid').val(), PASS: $('#pass').val(), HOST: $('#nhost').val(), MODEL: "VICTRO_"+$('#model').val(), URL: '<?php echo $victro_baseURL; ?>'},
-    beforeSend: function(){
-      loading_idhtml('victro-modal-body');
-    },
-		success: function (data) {
-      var returnedData = $.parseJSON(data);
-      console.log(returnedData);
-      if(Object.keys(returnedData).length > 1){
-        alert("Success");
-        $('#victro-modal-body').html(data);
-      } else {
-        alert("Error");
+  var sign = prompt("Are you using the same network that your addon?");
+  execAjax = false;
+  while(sign.toLowerCase() != "yes") {
+    sign = prompt("Are you using the same network that your addon?");
+  }
+  if(sign.toLowerCase() == "yes"){
+    execAjax = true;
+  }
+  console.log(execAjax);
+  if(execAjax == true){
+    var actualHost = $('#host').val();
+    var nowHTML = $('#victro-modal-body').html();
+    $.ajax({
+      type: "POST",
+      global: false,
+      url: SITE_URL+"sys/modal",
+      //url: "http://"+actualHost+".local/config.vic",
+      data: {type:"send_addon" ,TYPE: $('#wifi').val(), SSID: $('#ssid').val(), PASS: $('#pass').val(), HOST: $('#nhost').val(), MODEL: $('#model').val(), CONNECT: $("#host").val()},
+      beforeSend: function(){
+        execAjax == false;
+        loading_idhtml('victro-modal-body');
+      },
+      success: function (data) {
+        var returnedData = $.parseJSON(data);
+        console.log(returnedData);
+        if(returnedData.ERROR != true){
+          alert("Success");
+          $('#victro-modal-body').html(data);
+        } else {
+          alert("Error");
+          $('#victro-modal-body').html(nowHTML);
+        }
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        alert("Error: Cant find ADDON");
         $('#victro-modal-body').html(nowHTML);
       }
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-      alert("Error");
-      $('#victro-modal-body').html(nowHTML);
-		}
-	});
+    });
+  }
 }
 </script>

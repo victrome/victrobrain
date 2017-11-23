@@ -35,9 +35,22 @@ class addon extends model_robot{
   private $victro_hard = "";
   private $victro_type = "";
   private $victro_pin = 0;
+  private $victro_timer = 0;
+  private $victro_timer_volt = "";
   private $victro_volt = "";
   private $victro_setter = "";
   private $victro_robot = null;
+  private $victro_timeout =  10;
+  private $victro_timeReq =  0;
+  private $victro_Reqs =  0;
+  public function clear(){
+    $this->victro_hard = "";
+    $this->victro_type = "";
+    $this->victro_pin = 0;
+    $this->victro_timer = 0;
+    $this->victro_timer_volt = "";
+    $this->victro_volt = "";
+  }
   public function set_addon($victro_addon_id, $victro_robot){
     $this->victro_addon = $victro_addon_id;
     $this->victro_robot = $victro_robot;
@@ -59,12 +72,30 @@ class addon extends model_robot{
     $this->victro_volt = $victro_volt;
     return($this);
   }
+  public function timer($victro_time, $victro_volt){
+    $this->victro_timer = $victro_time;
+    $this->victro_timer_volt = $victro_volt;
+    return($this);
+  }
+  public function reqs_time($victro_time, $victro_reqs){
+    $this->victro_timeReq = $victro_time;
+    $this->victro_Reqs = $victro_reqs;
+    return($this);
+  }
   public function set(){
     $victro_before = "";
     if($this->victro_setter != ""){
       $victro_before = " ";
     }
     $this->victro_setter .= $victro_before ."P:".$this->victro_pin."&T:".$this->victro_type."&H:".$this->victro_hard."&V:".$this->victro_volt;
+    if($this->victro_timer > 0 && $this->victro_timer_volt != ""){
+      $this->victro_timeout = $this->victro_timeout + $this->victro_timer;
+      $this->victro_setter .= "&TM:".$this->victro_timer."&TMV:".$this->victro_timer_volt;
+    }
+    if($this->victro_timeReq > 0 && $this->victro_Reqs > 0){
+      $this->victro_setter .= "&TMR:".$this->victro_timeReq."&REQ:".$this->victro_Reqs;
+    }
+    $this->clear();
   }
   public function send(){
     $this->victro_setter = base64_encode($this->victro_setter);
@@ -78,7 +109,7 @@ class addon extends model_robot{
         $victro_hex .= dechex(ord($this->victro_setter[$i]));
       }
       $victro_row = $victro_query->get_row();
-      $victro_token1 = base64_encode($victro_row->TOKEN);
+      $victro_token1 = base64_encode($victro_row->TOKEN." ".SITE_URL."sys/addon");
       $victro_token='';
       for ($i=0; $i < strlen($victro_token1); $i++){
         $victro_token .= dechex(ord($victro_token1[$i]));
@@ -87,12 +118,18 @@ class addon extends model_robot{
       //echo $victro_row->LOCAL."/commands.vic".$victro_get;
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $victro_row->LOCAL."/commands.vic".$victro_get);
+      curl_setopt($ch, CURLOPT_TIMEOUT, $this->victro_timeout);
+      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,$this->victro_timeout);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $victro_addonHTML = curl_exec($ch);
       curl_close($ch);
-      return $victro_addonHTML;
+      if($victro_addonHTML != false){
+        return json_decode(str_replace(",}", "}",$victro_addonHTML));
+      } else {
+        return json_decode('{"ERROR": true, "MESSAGE": "ADDON DOES NOT REPLY"}');
+      }
     } else {
-      return false;
+      return json_decode('{"ERROR": true, "MESSAGE": "ADDON NOT FOUND"}');
     }
   }
   public function authenticate($victro_id, $victro_token){
@@ -129,32 +166,41 @@ class addon extends model_robot{
     return($victro_value);
   }
   public function send_new_addon(array $victro_addon){
-    if(isset($victro_addon['LOCAL'])){
+    if(isset($victro_addon['CONNECT'])){
       $this->select("ID");
       $this->from("victro_addon");
-      $this->where("ID = ".$this->victro_addon);
+      $this->where("LOCAL =", $victro_addon['CONNECT'].".local");
       $victro_query = $this->db_select();
-      if($victro_query->get_count() > 0){
+      if($victro_query->get_count() == 0){
         $victro_hex='';
-        for ($i=0; $i < strlen($this->victro_setter); $i++){
-          $victro_hex .= dechex(ord($this->victro_setter[$i]));
+        $victro_baseURL = base64_encode(SITE_URL);
+        for ($i=0; $i < strlen($victro_baseURL); $i++){
+          $victro_hex .= dechex(ord($victro_baseURL[$i]));
         }
-        $victro_row = $victro_query->get_row();
-        $victro_token1 = base64_encode($victro_row->TOKEN);
-        $victro_token='';
-        for ($i=0; $i < strlen($victro_token1); $i++){
-          $victro_token .= dechex(ord($victro_token1[$i]));
+        $victro_baseURL = $victro_hex;
+        $victro_model='';
+        $victro_model2="VICTRO_".$victro_addon['MODEL'];
+        for ($i=0; $i < strlen($victro_model2); $i++){
+          $victro_model .= dechex(ord($victro_model2[$i]));
         }
-        $victro_get = "?TOKEN=".$victro_token."&PIN=".$victro_hex;
-        //echo $victro_row->LOCAL."/commands.vic".$victro_get;
+        $victro_get = "?TYPE=".$victro_addon['TYPE'];
+        $victro_get .= "&SSID=".$victro_addon['SSID'];
+        $victro_get .= "&PASS=".$victro_addon['PASS'];
+        $victro_get .= "&HOST=".$victro_addon['HOST'];
+        $victro_get .= "&MODEL=".$victro_model;
+        $victro_get .= "&URL=".$victro_baseURL;
+        //echo $victro_addon['CONNECT'].".local/config.vic".$victro_get;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $victro_row->LOCAL."/commands.vic".$victro_get);
+        curl_setopt($ch, CURLOPT_URL, $victro_addon['CONNECT'].".local/config.vic".$victro_get);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $victro_addonHTML = curl_exec($ch);
         curl_close($ch);
+        if($victro_addonHTML == ""){
+          $victro_addonHTML = json_encode(array("ERROR"=>true));
+        }
         return $victro_addonHTML;
       } else {
-        return false;
+        return json_encode(array("ERROR"=>true));
       }
     }
   }
