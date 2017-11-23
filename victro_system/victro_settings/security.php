@@ -27,7 +27,7 @@ $victro_url_array = explode("/", $victro_p2); // get url in array
 array_shift($victro_url_array); // delete the first array
 $victro_db_folders = $victro_maker->getSettings("VICTRO_FOLDERS");
 $victro_start = $victro_db_folders->value; // get in db how much folders before victro directory
-$victro_unse = 0; // starts var 
+$victro_unse = 0; // starts var
 //Function to unset array while number folders is less then $victro_unse
 while ($victro_unse <= $victro_start) {
     if ($victro_unse != $victro_start) {
@@ -83,9 +83,9 @@ define('LANG_DIR', PATH_SYSTEM . PATH_SYSTEM . PATH_LANGUAGE . LANG . ".php");
 define('SESSION_NAME', $victro_maker->getSettings("VICTRO_SESSION_NAME")->value);
 define('PICTURE_LOGO', $victro_maker->getSettings("VICTRO_LOGO")->value);
 define('POWER_DIR', PATH_APP . PATH_POWER);
-define('STORAGE', SITE_URL . 'system/fileload?');
-define('STORAGE_NAME', SITE_URL . 'system/fileload?name=');
-define('STORAGE_ID', SITE_URL . 'system/fileload?id=');
+define('STORAGE', SITE_URL . 'loadfile?');
+define('STORAGE_NAME', SITE_URL . 'loadfile?name=');
+define('STORAGE_ID', SITE_URL . 'loadfile?id=');
 define('VICTRO_INDEX', $victro_maker->getSettings("VICTRO_INDEX")->value);
 define('SECURITY_KEY', md5(SESSION_NAME . date('m-Y')));
 define('STORAGE_KEY', md5(SESSION_NAME . 'system/fileload?'));
